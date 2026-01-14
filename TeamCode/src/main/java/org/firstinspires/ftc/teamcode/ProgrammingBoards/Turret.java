@@ -54,19 +54,31 @@ public class Turret
 
 
 
-
-        /*
-        if(Math.abs(angle-currAngle) > 30){
-            axon.setPower((angle - currAngle)/Math.abs(angle - currAngle));
-        }else if(Math.abs(angle-currAngle) > 10){
-            axon.setPower(0.3*((angle - currAngle)/Math.abs(angle - currAngle)));
-        }else{
-            axon.setPower(0);
-        };*/
-
         axon.setPower(output);
 
         prevTargetAngle = angle;
+
+    }
+    public void TurnToAuto(double angle){
+        double error = 0;
+        do{
+            if (Math.abs(angle - prevTargetAngle) > 20) {
+                integral = 0;
+            }
+
+            double currAngle = toDegrees(turretEncoder.encoder.getPositionAndVelocity().position);
+            error = angle - currAngle;
+            integral += error;
+
+            double output = kP * error + kI * integral;
+
+
+            axon.setPower(output);
+
+            prevTargetAngle = angle;
+        } while(Math.abs(error) > 2);
+        axon.setPower(0);
+
     }
     double xAngle;
     public void TurnToAT(double tag){
@@ -94,7 +106,7 @@ public class Turret
                 TurnTo(currAngle);
             }
         }
-        else
+                else
         {
             TurnTo(currAngle);
         }

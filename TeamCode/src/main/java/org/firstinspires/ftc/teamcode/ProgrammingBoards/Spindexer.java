@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -40,6 +41,7 @@ public class Spindexer {
     }
 
     public int ballCount = 0;
+    double currentPos = 0;
     ElapsedTime ballTimer = new ElapsedTime();
     public void checkIfBall(){
         if(ballCount == 3){
@@ -97,8 +99,15 @@ public class Spindexer {
 
     }
     public void rotateThird(){
-        spindexer.setPower(1);
-        toAngle((toDegree(spindexer.getCurrentPosition())%360) - 119);
+        spindexer.setPower(0.8);
+        toAngle((toDegree(spindexer.getCurrentPosition())%360) - 120);
+
+    }
+    public void getPos(){
+        if(touchSensor.isPressed()){
+            currentPos = 0;
+        }
+
     }
 
     public boolean returnShootingMode(){

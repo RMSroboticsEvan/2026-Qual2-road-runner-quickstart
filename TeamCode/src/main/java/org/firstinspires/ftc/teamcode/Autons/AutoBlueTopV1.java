@@ -37,90 +37,135 @@ public class AutoBlueTopV1 extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-48,-48, Math.toRadians(225)));
 
         Action shotOne = drive.actionBuilder(new Pose2d(-48,-48,Math.toRadians(225)))
-                .strafeToLinearHeading(new Vector2d(-10, -12), Math.toRadians(225))
+                .strafeToLinearHeading(new Vector2d(-8, -8), Math.toRadians(270))
                 .build();
-        Action takeBallsOneP1 = drive.actionBuilder(new Pose2d(-10, -12, Math.toRadians(225)))
-                .splineToLinearHeading(new Pose2d(-10,-28,Math.toRadians(270)), Math.toRadians(90))
+        Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(-8,-8,Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-8, -50), Math.toRadians(270))
                 .build();
-        Action takeBallsOneP2 = drive.actionBuilder(new Pose2d(-10, -28, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(-10,-54,Math.toRadians(270)), Math.toRadians(90))
+        Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(-8,-50,Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-8, -8), Math.toRadians(315))
                 .build();
-        Action shotTwo = drive.actionBuilder(new Pose2d(-10, -54, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(-10,-12,Math.toRadians(225)), Math.toRadians(0))
+        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(-8,-8,Math.toRadians(315)))
+                .splineToLinearHeading(new Pose2d(14,-60, Math.toRadians(270)), Math.toRadians(270))
                 .build();
-        Action takeBallsTwoP1 = drive.actionBuilder(new Pose2d(-10, -12, Math.toRadians(225)))
-                .splineToLinearHeading(new Pose2d(12,-25,Math.toRadians(270)), Math.toRadians(0))
+        Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(14,-60,Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-8, -8), Math.toRadians(315))
                 .build();
-        Action takeBallsTwoP2 = drive.actionBuilder(new Pose2d(8, -25, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(12,-57),Math.toRadians(270))
+        Action pickUpBallsThreeP1 = drive.actionBuilder(new Pose2d(-8,-8,Math.toRadians(315)))
+                .splineToLinearHeading(new Pose2d(40,-60, Math.toRadians(270)), Math.toRadians(270))
                 .build();
-        Action shot3 = drive.actionBuilder(new Pose2d(14, -57, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-10,-12),Math.toRadians(225))
+        Action pickUpBallsThreeP2 = drive.actionBuilder(new Pose2d(14,-60,Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-8, -8), Math.toRadians(245))
                 .build();
-        Action takeBallsThreeP1 = drive.actionBuilder(new Pose2d(-10, -12, Math.toRadians(225)))
-                .splineToLinearHeading(new Pose2d(38,-25,Math.toRadians(270)), Math.toRadians(0))
-                .build();
-        Action takeBallsThreeP2 = drive.actionBuilder(new Pose2d(38, -25, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(38, -57), Math.toRadians(270))
-                .build();
-        Action shot4 = drive.actionBuilder(new Pose2d(36, -57, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(21,-12), Math.toRadians(180))
-                .build();
-
 
 
         waitForStart();
         if (isStopRequested()) return;
 
         while(!isStopRequested() && opModeIsActive()) {
-            flywheel.runFlywheelVel(0.9);
-            turret.TurnTo(45);
+            int count = 0;
+            flywheel.runFlywheelVel(0.8);
             intake.runIntake(1);
-            sleep(600);
-            //spindexer
-            Actions.runBlocking(shotOne);
-            //spindexer
-            transfer.transferUp(1);
-            sleep(3100);
             transfer.transferDown(1);
-            Actions.runBlocking(
-                    new ParallelAction(
-                            new SequentialAction(
-                                    takeBallsOneP1,
-                                    takeBallsOneP2,
-                                    shotTwo
-                            )
-                    )
+            spindexer.spindexer.setPower(-0.7);
+            //turret.TurnToAuto(-17);
+            //Actions.runBlocking(shotOne);
+//            while(count < 100){
+//                if(spindexer.touchSensor.isPressed()){
+//                    spindexer.spindexer.setPower(0);
+//                    transfer.transferUp(1);
+//                    sleep(600);
+//                    spindexer.spindexer.setPower(-0.7);
+//                    count++;
+//                }else{
+//                    transfer.transferDown(1);
+//                    spindexer.spindexer.setPower(-0.7);
+//                }
+//            }
+            spindexer.spindexer.setPower(0.15
             );
             transfer.transferUp(1);
-            sleep(950);
-            sleep(1700);
-            transfer.transferDown(1);
-            Actions.runBlocking(
-                    new ParallelAction(
-                            new SequentialAction(
-                                    takeBallsTwoP1,
-                                    takeBallsTwoP2,
-                                    shot3
-                            )
-                    )
-            );
-            transfer.transferUp(1);
-            sleep(950);
-            sleep(1700);
-            transfer.transferDown(1);
-            Actions.runBlocking(
-                    new ParallelAction(
-                            new SequentialAction(
-                                    takeBallsThreeP1,
-                                    takeBallsThreeP2,
-                                    shot4
-                            )
-                    )
-            );
+            count = 0;
             sleep(30000);
-
-
+            transfer.transferDown(1);
+            spindexer.spindexer.setPower(-0.7);
+            Actions.runBlocking(
+                    new ParallelAction(
+                            new SequentialAction(
+                                    pickUpBallsOneP1,
+                                    pickUpBallsOneP2
+                            )
+                    )
+            );
+            turret.TurnToAuto(-62);
+            transfer.transferUp(1);
+            sleep(8000);
+//            while(count < 3){
+//                if(spindexer.touchSensor.isPressed()){
+//                    spindexer.spindexer.setPower(0);
+//                    sleep(100);
+//                    transfer.transferUp(1);
+//                    sleep(600);
+//                    spindexer.spindexer.setPower(-0.7);
+//                    count++;
+//                }else{
+//                    transfer.transferDown(1);
+//                    spindexer.spindexer.setPower(-0.7);
+//                }
+//            }
+//            count = 0;
+            transfer.transferDown(1);
+            spindexer.spindexer.setPower(-0.7);
+            sleep(30000);//REMOVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+            Actions.runBlocking(
+                    new ParallelAction(
+                            new SequentialAction(
+                                    pickUpBallsTwoP1,
+                                    pickUpBallsTwoP2
+                            )
+                    )
+            );
+//            while(count < 3){
+//                if(spindexer.touchSensor.isPressed()){
+//                    spindexer.spindexer.setPower(0);
+//                    sleep(100);
+//                    transfer.transferUp(1);
+//                    sleep(600);
+//                    spindexer.spindexer.setPower(-0.7);
+//                    count++;
+//                }else{
+//                    transfer.transferDown(1);
+//                    spindexer.spindexer.setPower(-0.7);
+//                }
+//            }
+//            count = 0;
+            transfer.transferDown(1);
+            spindexer.spindexer.setPower(-0.7);
+            Actions.runBlocking(
+                    new ParallelAction(
+                            new SequentialAction(
+                                    pickUpBallsThreeP1,
+                                    pickUpBallsThreeP2
+                            )
+                    )
+            );
+//            while(count < 3){
+//                if(spindexer.touchSensor.isPressed()){
+//                    spindexer.spindexer.setPower(0);
+//                    sleep(100);
+//                    transfer.transferUp(1);
+//                    sleep(600);
+//                    spindexer.spindexer.setPower(-0.7);
+//                    count++;
+//                }else{
+//                    transfer.transferDown(1);
+//                    spindexer.spindexer.setPower(-0.7);
+//                }
+//            }
+//            count = 0;
+            transfer.transferDown(0);
+            spindexer.spindexer.setPower(0);
+            sleep(30000);
         }
     }
 }

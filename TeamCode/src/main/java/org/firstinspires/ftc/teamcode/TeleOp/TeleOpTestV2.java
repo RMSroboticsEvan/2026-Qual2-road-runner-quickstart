@@ -5,6 +5,7 @@ import android.util.Log;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.DriveTrain;
@@ -37,15 +38,13 @@ public class TeleOpTestV2 extends LinearOpMode {
 
 
         waitForStart();
-
+        spindexer.spindexer.setPower(-0.7);
         while (!isStopRequested() && opModeIsActive()) {
             telemetry.addData("current", spindexer.spindexer.getCurrentPosition());
             telemetry.addData("target", spindexer.spindexer.getTargetPosition());
             telemetry.addData("vel", flywheel.returnVel());
-            telemetry.addData("red", spindexer.getRedResult());
-            telemetry.addData("green", spindexer.getGreenResult());
-            telemetry.addData("blue", spindexer.getBlueResult());
-            telemetry.addData("touch", spindexer.touchSensor.isPressed());
+            telemetry.addData("touchState", spindexer.touchSensor.isPressed());
+
             telemetry.addData("distance", spindexer.distanceSensor.getDistance(DistanceUnit.MM));
             telemetry.addData("Accepting Balls? : ", spindexer.returnShootingMode());
             telemetry.addData("balls", spindexer.ballCount);
@@ -65,12 +64,14 @@ public class TeleOpTestV2 extends LinearOpMode {
                 flywheel.flywheel.setPower(0.8);
             }
 
-            //SWITCHING MODES AND TURNING 120
-            if (gamepad2.leftBumperWasPressed()){
-                spindexer.switchModes();
-            }
+
             if (gamepad2.rightBumperWasPressed()){
+                spindexer.spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 spindexer.rotateThird();
+            }
+            if(gamepad2.left_bumper){
+                spindexer.spindexer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                spindexer.spindexer.setPower(-0.7);
             }
 
 
@@ -78,15 +79,27 @@ public class TeleOpTestV2 extends LinearOpMode {
             intake.runIntake(1);
 
 
+
+
+
+
             //TRANSFER
-            if(gamepad2.square){
-                transfer.transferDown(1);
+
+
+            if(gamepad2.square && spindexer.touchSensor.isPressed()){
+                transfer.transferUp(1);
+                sleep(100);
+                spindexer.spindexer.setPower(0);
+                sleep(600);
+                spindexer.spindexer.setPower(-0.7);
+
             }else{
-                transfer.transferDown(-1);
+                transfer.transferDown(1);
+                spindexer.spindexer.setPower(-0.7);
             }
 
             //BALLCOUNT
-            spindexer.checkIfBall();
+            //spindexer.checkIfBall();
 
             //RESET BALL COUNT
             if(gamepad2.circleWasPressed()){spindexer.resetBallCount();}

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Flywheel;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Intake;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Spindexer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
-import org.firstinspires.ftc.teamcode.ProgrammingBoards.Turret;
+
 
 
 @TeleOp
@@ -26,7 +26,6 @@ public class TeleOpBlue extends LinearOpMode {
 
     private Flywheel flywheel;
 
-    private Turret turret;
 
 
     @Override
@@ -36,7 +35,6 @@ public class TeleOpBlue extends LinearOpMode {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
-        turret = new Turret(hardwareMap);
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double speed = 0.85;
 
@@ -108,25 +106,7 @@ public class TeleOpBlue extends LinearOpMode {
 
 
             //TURRET AUTO ALIGN
-            if(gamepad2.cross){turret.TurnToAT(20);}else{turret.TurnTo(0);}
 
-
-            telemetry.addData("angle", turret.getCurrAngle());
-            telemetry.addData("tx", turret.getTx());
-            Log.d("turret", ""+turret.getCurrAngle());
-            Log.d("limelight", ""+turret.limelight.getLatestResult());
-            LLResult result = turret.limelight.getLatestResult();
-
-            //get limelight values:
-            if (result != null) {
-                if(result.isValid()) {
-                    telemetry.addData("limelight angle", turret.limelight.getLatestResult().getTx());
-                    if(!result.getFiducialResults().isEmpty()) {
-                        telemetry.addData("tag id", result.getFiducialResults().get(0).getFiducialId());
-                    }
-
-                }
-            }
             telemetry.update();
 
         }

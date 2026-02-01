@@ -35,11 +35,14 @@ public class TurretV2
 
     private double toTicks(double angle)
     {
-        return angle * 29.7770061728;
+        // GoBILDA 435 RPM motor (28 CPR × 17.7 ratio = 495.6 ticks/rev)
+        // Pulley ratio: 110/48 = 2.2917
+        // Ticks per turret degree: 495.6 × 2.2917 / 360 = 3.155
+        return angle * 3.15493055556;
     }
     private double toDegrees(double ticks)
     {
-        return ticks/29.7770061728;
+        return ticks / 3.15493055556;
     }
 
 

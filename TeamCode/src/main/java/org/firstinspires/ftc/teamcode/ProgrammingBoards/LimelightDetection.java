@@ -17,6 +17,7 @@ public class LimelightDetection {
 
             // --- Read Limelight values ---
             double ty = result.getTy(); // vertical angle in degrees
+            double tx = result.getTx(); // horizontal angle in degrees
             double ta = result.getTa(); // target area in percent (small number, usually 0-5 for far targets)
 
             // --- Constants ---
@@ -29,6 +30,12 @@ public class LimelightDetection {
             double distanceTy = -1;
             if (ty != 0) {
                 distanceTy = heightDifference / Math.tan(Math.toRadians(cameraAngle + ty));
+            }
+ 
+ 	    // --- adjust distance based on horizontal angle 
+            double distanceTxTy = -1;
+            if (tx !=0 && distanceTy != -1) {
+                distanceTxTy = distanceTy/Math.cos(Math.toRadians(tx));
             }
 
             // --- Distance from ta ---
@@ -45,17 +52,17 @@ public class LimelightDetection {
             // --- Determine final distance ---
             double distanceInches;
 
-            if (distanceTy > 0 && distanceTy < blendStart) {
+            if (distanceTxTy > 0 && distanceTxTy < blendStart) {
                 // Close range: use ty only
-                distanceInches = distanceTy;
-            } else if (distanceTa > 0 && distanceTy > blendEnd) {
+                distanceInches = distanceTxTy;
+            } else if (distanceTa > 0 && distanceTxTy > blendEnd) {
                 // Far range: use ta only
                 distanceInches = distanceTa;
-            } else if (distanceTy > 0 && distanceTa > 0) {
+            } else if (distanceTxTy > 0 && distanceTa > 0) {
                 // Blend region: linear interpolation
-                double t = (distanceTy - blendStart) / (blendEnd - blendStart);
+                double t = (distanceTxTy - blendStart) / (blendEnd - blendStart);
                 t = Math.max(0, Math.min(1, t)); // clamp 0–1
-                distanceInches = distanceTy * (1 - t) + distanceTa * t;
+                distanceInches = distanceTxTy * (1 - t) + distanceTa * t;
             } else {
                 distanceInches = -1; // no valid measurement
             }

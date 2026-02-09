@@ -21,7 +21,7 @@ public class TurretV3 {
     private static final double MAX_POSITION = 1.0;
 
 
-    private static final double KP = 0.012;      // proportional gain
+    private static final double KP = 0.6;        // proportional gain (0-1, percentage of correction per loop)
     private static final double DEADBAND = 1.0;  // degrees
 
 
@@ -61,8 +61,8 @@ public class TurretV3 {
         // Stop when aligned
         if (Math.abs(tx) < DEADBAND) return;
 
-        // Proportional correction
-        double correction = tx * KP;
+        // Convert degrees to servo position, then apply proportional gain
+        double correction = (tx / SERVO_RANGE_DEGREES) * KP;
 
         currentTargetPosition -= correction;
         currentTargetPosition = clamp(currentTargetPosition);

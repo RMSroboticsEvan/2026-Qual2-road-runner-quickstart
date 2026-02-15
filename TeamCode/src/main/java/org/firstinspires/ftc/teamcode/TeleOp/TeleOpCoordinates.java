@@ -56,12 +56,15 @@ public class TeleOpCoordinates extends LinearOpMode {
             } else if (gamepad2.circleWasPressed()) {
                 speed = speed + 0.025;
             }
-            r = 90 + Math.toDegrees(Math.atan(Math.abs(-63-currentPose.position.x)/Math.abs(58-currentPose.position.y)));
+            // Calculate angle from robot to target (-63, 58)
+            double deltaX = -63 - currentPose.position.x;
+            double deltaY = 58 - currentPose.position.y;
+            r = Math.toDegrees(Math.atan2(deltaY, deltaX));
             turretV2.turnTo(-Math.toDegrees(currentPose.heading.toDouble()) + r);
 
             telemetry.addData("X", currentPose.position.x);
             telemetry.addData("Y", currentPose.position.y);
-            telemetry.addData("atan", Math.toDegrees(Math.atan(Math.abs(-63-currentPose.position.x)/Math.abs(58-currentPose.position.y))));
+            telemetry.addData("Target Angle", r);
             telemetry.addData("Heading", Math.toDegrees(currentPose.heading.toDouble()));
 
             if (gamepad1.crossWasPressed()) {

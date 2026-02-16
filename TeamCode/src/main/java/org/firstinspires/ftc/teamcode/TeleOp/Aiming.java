@@ -116,6 +116,7 @@ public class Aiming extends LinearOpMode {
                 transfer.transferDown(1);
             }
 
+            //commit
             telemetry.update();
         }
     }

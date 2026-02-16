@@ -66,9 +66,9 @@ public class Aiming extends LinearOpMode {
 //                speed += 0.025;
 //            }
 
-            if (currentPose.position.x > 20) {
+            if (currentPose.position.x > 30) {
                 speed = 1; //Far shooting
-            } else if (currentPose.position.x < -40) {
+            } else if (currentPose.position.x < -25) {
                 speed = 0.8; //Close shooting
             } else {
                 speed = 0.85; //Regular shooting

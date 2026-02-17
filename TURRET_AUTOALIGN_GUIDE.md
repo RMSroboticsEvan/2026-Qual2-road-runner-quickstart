@@ -46,8 +46,10 @@ The new `TurretController` provides a unified turret aiming system that can be u
   3. If error > 5°, switches to pure AprilTag mode
   4. Otherwise uses odometry + correction offset
 - **Pros:** Best of both worlds - fast and accurate
-- **Cons:** Slightly more complex
-- **When to use:** Default for most situations
+- **Cons:** Slightly more complex, requires AprilTag working properly
+- **When to use:** When AprilTag is reliable and you want drift correction
+
+**Note:** TeleOp starts in ODOMETRY mode by default. Press Triangle to cycle to HYBRID mode.
 
 ## TeleOp Controls
 
@@ -117,7 +119,7 @@ TurretController (Common/)
     └── Provides update() method for main loop
 
 BaseTeleOp (Common/)
-    ├── Creates TurretController (HYBRID mode)
+    ├── Creates TurretController (ODOMETRY mode by default)
     ├── Handles driver input (mode switching, reset, manual control)
     └── Calls turretController.update() every loop
 
@@ -150,11 +152,12 @@ When odometry drift gets too large, driver presses Cross button at the "reset co
 ## Testing Recommendations
 
 ### TeleOp Testing
-1. Start in HYBRID mode (default)
+1. Start in ODOMETRY mode (default) - pure odometry-based aiming
 2. Drive around and shoot - verify turret tracks correctly
-3. Press Triangle to cycle through modes - verify each works
-4. Drive to reset corner (59, -59) - press Cross - verify odometry resets
-5. Deliberately drive in circles to cause drift - verify HYBRID mode corrects
+3. Press Triangle to cycle to HYBRID mode - verify AprilTag correction works (if AprilTag functional)
+4. Press Triangle again to test other modes - verify each works
+5. Drive to reset corner (59, -59) - press Cross - verify odometry resets
+6. Deliberately drive in circles to cause drift - verify HYBRID mode corrects (when switched to HYBRID)
 
 ### Autonomous Testing
 1. Test default (useAutoAlign = false) - verify hardcoded angles work

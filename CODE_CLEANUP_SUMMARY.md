@@ -51,11 +51,11 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
 - **Features**:
   - **4 Aiming Modes:**
     - MANUAL: Driver control via D-pad
-    - ODOMETRY: Auto-aim using drivetrain position (fast)
+    - ODOMETRY: Auto-aim using drivetrain position (fast) - **DEFAULT in TeleOp**
     - APRILTAG: Auto-aim using Limelight (accurate)
-    - HYBRID: Odometry + AprilTag correction (RECOMMENDED)
-  - Automatic odometry drift correction
-  - Switchable modes during match (driver control)
+    - HYBRID: Odometry + AprilTag correction (available via mode cycling)
+  - Automatic odometry drift correction (in HYBRID mode)
+  - Switchable modes during match (driver control - Triangle button)
   - Odometry reset at known position
   - Works in both TeleOp and Autonomous
   - Telemetry for debugging

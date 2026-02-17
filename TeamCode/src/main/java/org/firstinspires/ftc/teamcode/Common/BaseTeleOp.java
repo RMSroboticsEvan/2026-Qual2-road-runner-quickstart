@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.Common;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.DriveTrain;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Flywheel;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Intake;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Spindexer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
+import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
 
 /**
  * Base class for TeleOp programs that eliminates Blue/Red code duplication.
@@ -20,6 +23,9 @@ public abstract class BaseTeleOp extends LinearOpMode {
     protected Intake intake;
     protected Transfer transfer;
     protected Flywheel flywheel;
+    protected TurretV2 turret;
+    protected MecanumDrive drive;
+    protected TurretController turretController;
     protected AllianceConfig config;
 
     protected double speed;
@@ -60,6 +66,7 @@ public abstract class BaseTeleOp extends LinearOpMode {
         while (!isStopRequested() && opModeIsActive()) {
             updateTelemetry();
             handleDrivetrain();
+            handleTurret();
             handleFlywheel();
             handleIntakeSystem();
 
@@ -76,6 +83,13 @@ public abstract class BaseTeleOp extends LinearOpMode {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
+        turret = new TurretV2(hardwareMap);
+
+        // Initialize Road Runner for odometry-based turret aiming
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(180)));
+
+        // Initialize turret controller (starts in HYBRID mode)
+        turretController = new TurretController(turret, drive, TurretController.AimingMode.HYBRID);
 
         // Configure flywheel
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -93,6 +107,7 @@ public abstract class BaseTeleOp extends LinearOpMode {
         telemetry.addData("vel", flywheel.returnVel());
         telemetry.addData("balls", spindexer.ballCount);
         telemetry.addData("speed", speed);
+        telemetry.addData("Turret", turretController.getTelemetryString());
     }
 
     /**
@@ -104,6 +119,47 @@ public abstract class BaseTeleOp extends LinearOpMode {
             gamepad1.right_stick_x,
             gamepad1.left_stick_x
         );
+
+        // Update odometry for turret aiming
+        drive.updatePoseEstimate();
+    }
+
+    /**
+     * Handle turret aiming system
+     *
+     * Controls:
+     * - Triangle (gamepad1): Cycle through aiming modes (MANUAL → ODOMETRY → HYBRID → APRILTAG)
+     * - Cross (gamepad1): Reset odometry with AprilTag (use at reset corner)
+     * - D-pad left/right (gamepad2): Manual turret control (only in MANUAL mode)
+     */
+    private void handleTurret() {
+        // Cycle aiming modes
+        if (gamepad1.triangleWasPressed()) {
+            turretController.cycleAimingMode();
+        }
+
+        // Reset odometry at reset corner
+        if (gamepad1.crossWasPressed()) {
+            turretController.resetOdometryWithAprilTag();
+            // Also reset drive pose to known position
+            drive.localizer.setPose(new Pose2d(59, -59, Math.toRadians(0)));
+        }
+
+        // Manual turret control (only works in MANUAL mode)
+        if (turretController.getAimingMode() == TurretController.AimingMode.MANUAL) {
+            if (gamepad2.dpad_left) {
+                // Turn left manually (increment by small amount each frame)
+                double currentAngle = turret.turret.getPosition() * turret.conversion - 0.505;
+                turretController.setManualAngle(currentAngle - 2);
+            } else if (gamepad2.dpad_right) {
+                // Turn right manually
+                double currentAngle = turret.turret.getPosition() * turret.conversion - 0.505;
+                turretController.setManualAngle(currentAngle + 2);
+            }
+        }
+
+        // Update turret position based on current mode
+        turretController.update();
     }
 
     /**
@@ -156,13 +212,4 @@ public abstract class BaseTeleOp extends LinearOpMode {
             && gamepad1.right_stick_x == 0
             && gamepad1.left_stick_x == 0;
     }
-
-    // TODO: Enable these features when ready
-    // protected void handleBallCounting() {
-    //     spindexer.checkIfBall();
-    // }
-    //
-    // protected void handleTurretAutoAlign() {
-    //     // Vision-based turret alignment
-    // }
 }

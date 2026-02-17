@@ -20,6 +20,8 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
 /**
  * Base class for Autonomous programs that eliminates Blue/Red code duplication.
  * Handles coordinate mirroring for Red alliance automatically.
+ *
+ * NEW: Optional turret auto-align during autonomous to recover from being bumped
  */
 public abstract class BaseAutonomousTopV2 extends LinearOpMode {
     protected Spindexer spindexer;
@@ -29,6 +31,11 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
     protected TurretV2 turret;
     protected AllianceConfig config;
     protected MecanumDrive drive;
+    protected TurretController turretController;
+
+    // Configuration: Enable auto-align during autonomous?
+    // Set to true to use HYBRID mode (recovers from bumps), false for hardcoded angles
+    protected boolean useAutoAlign = false;
 
     // Flywheel PIDF coefficients
     private static final double PIDF_P = 150;
@@ -86,6 +93,12 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
             Math.toRadians(config.getStartHeading())
         );
         drive = new MecanumDrive(hardwareMap, startPose);
+
+        // Initialize turret controller
+        // Use HYBRID mode if auto-align enabled, otherwise MANUAL for hardcoded angles
+        TurretController.AimingMode mode = useAutoAlign ?
+            TurretController.AimingMode.HYBRID : TurretController.AimingMode.MANUAL;
+        turretController = new TurretController(turret, drive, mode);
     }
 
     // Actions (will be built with alliance-specific coordinates)
@@ -170,7 +183,7 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
         flywheel.flywheel.setVelocity(FLYWHEEL_SPEED * FLYWHEEL_MAX_VELOCITY);
         sleep(FLYWHEEL_SPINUP_MS);
         intake.runIntake(1);
-        turret.turnTo(config.isBlue() ? -86 : 86); // Mirror turret angle
+        aimTurret(config.isBlue() ? -86 : 86); // Preload shooting position
         Actions.runBlocking(shootPreload);
         shootBall(SHOOTING_DURATION_MS);
 
@@ -187,14 +200,14 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
                 new SequentialAction(pickUpBallsTwoP1, pickUpBallsTwoP2)
         ));
         shootBall(SHOOTING_DURATION_SHORT_MS);
-        turret.turnTo(config.isBlue() ? -45 : 45); // Mirror turret angle
+        aimTurret(config.isBlue() ? -45 : 45); // Adjust angle for new position
 
         // Pick up and shoot first row balls
         Actions.runBlocking(new ParallelAction(
                 new SequentialAction(pickUpBallsThreeP1, pickUpBallsThreeP2)
         ));
         shootBall(SHOOTING_DURATION_SHORT_MS);
-        turret.turnTo(config.isBlue() ? -90 : 90); // Mirror turret angle
+        aimTurret(config.isBlue() ? -90 : 90); // Adjust angle for new position
 
         // Pick up and shoot third row balls
         Actions.runBlocking(new ParallelAction(
@@ -208,6 +221,26 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
         Actions.runBlocking(leaveShootingZone);
 
         sleep(50000); // Final stop to prevent re-looping
+    }
+
+    /**
+     * Aim turret using either hardcoded angle (default) or auto-align (if enabled)
+     * @param fallbackAngle The hardcoded angle to use if auto-align is disabled
+     */
+    private void aimTurret(double fallbackAngle) throws InterruptedException {
+        if (useAutoAlign) {
+            // Update drive odometry
+            drive.updatePoseEstimate();
+
+            // Use turret controller in HYBRID mode (auto-aligns with AprilTag correction)
+            turretController.update();
+
+            // Give it a moment to align
+            sleep(200);
+        } else {
+            // Use hardcoded angle
+            turretController.setManualAngle(fallbackAngle);
+        }
     }
 
     /**

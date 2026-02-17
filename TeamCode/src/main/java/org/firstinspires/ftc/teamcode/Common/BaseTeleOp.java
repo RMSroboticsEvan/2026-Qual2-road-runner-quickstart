@@ -88,8 +88,8 @@ public abstract class BaseTeleOp extends LinearOpMode {
         // Initialize Road Runner for odometry-based turret aiming
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(180)));
 
-        // Initialize turret controller (starts in HYBRID mode)
-        turretController = new TurretController(turret, drive, TurretController.AimingMode.HYBRID);
+        // Initialize turret controller (starts in ODOMETRY mode - pure odometry, no AprilTag)
+        turretController = new TurretController(turret, drive, TurretController.AimingMode.ODOMETRY);
 
         // Configure flywheel
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -126,6 +126,8 @@ public abstract class BaseTeleOp extends LinearOpMode {
 
     /**
      * Handle turret aiming system
+     *
+     * Default mode: ODOMETRY (pure odometry-based aiming, no AprilTag)
      *
      * Controls:
      * - Triangle (gamepad1): Cycle through aiming modes (MANUAL → ODOMETRY → HYBRID → APRILTAG)

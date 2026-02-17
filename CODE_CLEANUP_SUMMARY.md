@@ -3,7 +3,11 @@
 ## Branch: `paul_2026_0216_code_cleanup`
 
 ## Overview
-This cleanup eliminates 85%+ code duplication between Blue/Red alliance programs by introducing a parametrized architecture. Instead of copy/pasting code for each alliance, we now have base classes that accept alliance-specific configuration.
+This cleanup accomplishes two major improvements:
+1. **Eliminates 85%+ code duplication** between Blue/Red alliance programs by introducing a parametrized architecture
+2. **Adds unified turret auto-align system** that works in both TeleOp and Autonomous with multiple aiming modes
+
+Instead of copy/pasting code for each alliance, we now have base classes that accept alliance-specific configuration. The new TurretController provides intelligent aiming with odometry drift correction.
 
 ## Changes Made
 
@@ -22,8 +26,9 @@ This cleanup eliminates 85%+ code duplication between Blue/Red alliance programs
 - **Location**: `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Common/BaseTeleOp.java`
 - **Purpose**: Contains all common TeleOp logic
 - **Features**:
-  - Hardware initialization
-  - Drivetrain control
+  - Hardware initialization (including turret and odometry)
+  - Drivetrain control with pose estimation
+  - **NEW: Turret auto-align with mode switching**
   - Flywheel speed management
   - Intake/spindexer/transfer system handling
   - Telemetry display
@@ -37,7 +42,23 @@ This cleanup eliminates 85%+ code duplication between Blue/Red alliance programs
   - Road Runner path generation
   - 5-ball pickup sequence (preload + 4 cycles)
   - Turret angle mirroring
+  - **NEW: Optional auto-align during autonomous (recovers from bumps)**
   - Complete autonomous routine from start to parking
+
+#### TurretController.java (NEW)
+- **Location**: `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Common/TurretController.java`
+- **Purpose**: Unified turret control system with multiple aiming modes
+- **Features**:
+  - **4 Aiming Modes:**
+    - MANUAL: Driver control via D-pad
+    - ODOMETRY: Auto-aim using drivetrain position (fast)
+    - APRILTAG: Auto-aim using Limelight (accurate)
+    - HYBRID: Odometry + AprilTag correction (RECOMMENDED)
+  - Automatic odometry drift correction
+  - Switchable modes during match (driver control)
+  - Odometry reset at known position
+  - Works in both TeleOp and Autonomous
+  - Telemetry for debugging
 
 ### 2. Refactored Files
 
@@ -68,19 +89,31 @@ This cleanup eliminates 85%+ code duplication between Blue/Red alliance programs
 - ✅ **AutoRedTopV2 is now fully implemented** (was empty before)
 - ✅ **Removed the 50-second temporary stop** from AutoBlueTopV2
 - ✅ **Standardized spindexer power values** through AllianceConfig
+- ✅ **Turret control now works in TeleOp** (was completely disabled before)
+- ✅ **Autonomous resilient to being bumped** (optional auto-align with AprilTag correction)
 
-### 2. Code Quality
+### 2. New Turret Features
+- **4 Aiming Modes**: MANUAL, ODOMETRY, APRILTAG, HYBRID
+- **Odometry Drift Correction**: HYBRID mode automatically corrects drift using AprilTag
+- **Driver Control**: Cycle modes mid-match (Triangle button)
+- **Reset Capability**: Reset odometry at known position (Cross button at 59,-59)
+- **Unified System**: Same turret code for TeleOp and Autonomous
+- **Fallback Safety**: Always has hardcoded angles as backup
+
+### 3. Code Quality
 - **DRY Principle**: Don't Repeat Yourself - eliminated massive duplication
-- **Single Source of Truth**: Alliance differences in one file (AllianceConfig)
+- **Single Source of Truth**: Alliance differences in one file (AllianceConfig), turret logic in one class (TurretController)
 - **Maintainability**: Bug fixes/changes now update both alliances automatically
 - **Readability**: TeleOp and Autonomous files are now under 25 lines each
 - **Type Safety**: Compile-time checking of alliance configuration
 
-### 3. Reduced Technical Debt
+### 4. Reduced Technical Debt
 - **Before**: Changing TeleOp behavior required editing 2 files identically
 - **After**: Change once in BaseTeleOp, automatically applies to both alliances
 - **Before**: AutoRedTopV2 was empty (critical competition risk)
 - **After**: AutoRedTopV2 fully functional with proper coordinate mirroring
+- **Before**: Turret control disabled in TeleOp, hardcoded-only in Autonomous
+- **After**: Intelligent turret system with multiple modes and drift correction
 
 ## Code Statistics
 

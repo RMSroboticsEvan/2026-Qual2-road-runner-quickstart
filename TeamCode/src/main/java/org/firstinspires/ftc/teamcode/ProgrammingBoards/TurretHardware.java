@@ -12,10 +12,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.List;
 
-public class TurretV2 {
+/**
+ * TurretHardware - Low-level hardware interface for turret control
+ *
+ * This is the hardware abstraction layer for the turret subsystem.
+ * Controls the physical servo and Limelight, provides basic aiming methods.
+ *
+ * Hardware:
+ * - Servo: "axon" (positional servo, 0-1 range)
+ * - Limelight 3A: Vision system for AprilTag detection
+ *
+ * Used by: TurretController (high-level intelligent aiming)
+ */
+public class TurretHardware {
     public Limelight3A limelight;
     public Servo turret;
-    public TurretV2(HardwareMap hardwareMap) {
+    public TurretHardware(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         limelight.pipelineSwitch(0);
         turret = hardwareMap.get(Servo.class, "axon");

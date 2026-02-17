@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Flywheel;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Intake;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Spindexer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
-import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
+import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretHardware;
 
 /**
  * Base class for Autonomous programs that eliminates Blue/Red code duplication.
@@ -28,7 +28,7 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
     protected Intake intake;
     protected Transfer transfer;
     protected Flywheel flywheel;
-    protected TurretV2 turret;
+    protected TurretHardware turret;
     protected AllianceConfig config;
     protected MecanumDrive drive;
     protected TurretController turretController;
@@ -76,7 +76,7 @@ public abstract class BaseAutonomousTopV2 extends LinearOpMode {
      * Initialize all hardware components
      */
     private void initializeHardware() {
-        turret = new TurretV2(hardwareMap);
+        turret = new TurretHardware(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
         intake = new Intake(hardwareMap);
         spindexer = new Spindexer(hardwareMap);

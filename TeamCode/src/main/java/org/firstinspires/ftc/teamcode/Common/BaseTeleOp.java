@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Flywheel;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Intake;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Spindexer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
-import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
+import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretHardware;
 
 /**
  * Base class for TeleOp programs that eliminates Blue/Red code duplication.
@@ -23,7 +23,7 @@ public abstract class BaseTeleOp extends LinearOpMode {
     protected Intake intake;
     protected Transfer transfer;
     protected Flywheel flywheel;
-    protected TurretV2 turret;
+    protected TurretHardware turret;
     protected MecanumDrive drive;
     protected TurretController turretController;
     protected AllianceConfig config;
@@ -83,7 +83,7 @@ public abstract class BaseTeleOp extends LinearOpMode {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
-        turret = new TurretV2(hardwareMap);
+        turret = new TurretHardware(hardwareMap);
 
         // Initialize Road Runner for odometry-based turret aiming
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(180)));

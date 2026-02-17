@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
+import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretHardware;
 
 /**
  * Unified turret control system with multiple aiming modes.
@@ -25,7 +25,7 @@ public class TurretController {
         HYBRID       // Odometry + AprilTag correction when available
     }
 
-    private final TurretV2 turret;
+    private final TurretHardware turret;
     private final MecanumDrive drive;
     private AimingMode currentMode;
 
@@ -48,7 +48,7 @@ public class TurretController {
      * @param drive The mecanum drive for odometry (can be null if only using manual/AprilTag)
      * @param initialMode Starting aiming mode
      */
-    public TurretController(TurretV2 turret, MecanumDrive drive, AimingMode initialMode) {
+    public TurretController(TurretHardware turret, MecanumDrive drive, AimingMode initialMode) {
         this.turret = turret;
         this.drive = drive;
         this.currentMode = initialMode;

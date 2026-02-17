@@ -34,8 +34,8 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
   - Telemetry display
   - Uses AllianceConfig for alliance-specific behavior
 
-#### BaseAutonomousTopV2.java
-- **Location**: `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Common/BaseAutonomousTopV2.java`
+#### BaseAutonomousTop.java
+- **Location**: `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Common/BaseAutonomousTop.java`
 - **Purpose**: Contains all common autonomous logic with coordinate mirroring
 - **Features**:
   - Automatic coordinate mirroring for Red alliance
@@ -68,17 +68,17 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
 - **Reduction**: 84% fewer lines!
 - **Changes**: Now simply extends `BaseTeleOp` and provides `AllianceConfig`
 
-#### AutoBlueTopV2.java
+#### AutoBlueTop.java
 - **Before**: 187 lines
 - **After**: 24 lines
 - **Reduction**: 87% fewer lines!
-- **Changes**: Extends `BaseAutonomousTopV2` and provides `AllianceConfig.forBlue()`
+- **Changes**: Extends `BaseAutonomousTop` and provides `AllianceConfig.forBlue()`
 
-#### AutoRedTopV2.java
+#### AutoRedTop.java
 - **Before**: 39 lines (EMPTY - only had constructor)
 - **After**: 25 lines (FULLY IMPLEMENTED)
-- **Major Fix**: ✅ **AutoRedTopV2 now has complete autonomous routine!**
-- **Changes**: Extends `BaseAutonomousTopV2` and provides `AllianceConfig.forRed()`
+- **Major Fix**: ✅ **AutoRedTop now has complete autonomous routine!**
+- **Changes**: Extends `BaseAutonomousTop` and provides `AllianceConfig.forRed()`
   - Automatically mirrors all coordinates for Red alliance
   - Automatically mirrors turret angles
   - Uses Red-specific spindexer power settings
@@ -86,8 +86,8 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
 ## Key Improvements
 
 ### 1. Fixed Critical Issues
-- ✅ **AutoRedTopV2 is now fully implemented** (was empty before)
-- ✅ **Removed the 50-second temporary stop** from AutoBlueTopV2
+- ✅ **AutoRedTop is now fully implemented** (was empty before)
+- ✅ **Removed the 50-second temporary stop** from AutoBlueTop
 - ✅ **Standardized spindexer power values** through AllianceConfig
 - ✅ **Turret control now works in TeleOp** (was completely disabled before)
 - ✅ **Autonomous resilient to being bumped** (optional auto-align with AprilTag correction)
@@ -110,8 +110,8 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
 ### 4. Reduced Technical Debt
 - **Before**: Changing TeleOp behavior required editing 2 files identically
 - **After**: Change once in BaseTeleOp, automatically applies to both alliances
-- **Before**: AutoRedTopV2 was empty (critical competition risk)
-- **After**: AutoRedTopV2 fully functional with proper coordinate mirroring
+- **Before**: AutoRedTop was empty (critical competition risk)
+- **After**: AutoRedTop fully functional with proper coordinate mirroring
 - **Before**: Turret control disabled in TeleOp, hardcoded-only in Autonomous
 - **After**: Intelligent turret system with multiple modes and drift correction
 
@@ -121,8 +121,8 @@ Instead of copy/pasting code for each alliance, we now have base classes that ac
 |-----------|--------|-------|-----------|
 | TeleOpBlue.java | 115 lines | 18 lines | 84% |
 | TeleOpRed.java | 115 lines | 18 lines | 84% |
-| AutoBlueTopV2.java | 187 lines | 24 lines | 87% |
-| AutoRedTopV2.java | 39 lines (empty) | 25 lines (complete) | N/A |
+| AutoBlueTop.java | 187 lines | 24 lines | 87% |
+| AutoRedTop.java | 39 lines (empty) | 25 lines (complete) | N/A |
 | **Total** | **456 lines** | **85 lines** | **81%** |
 | **New Common Code** | 0 lines | 360 lines | Added |
 | **Net Change** | 456 lines | 445 lines total | Organized! |
@@ -162,8 +162,8 @@ new Vector2d(-10, 6)   // Y = 6 (mirrored)
    - Verify spindexer power differences maintained
 
 2. **Autonomous Testing**
-   - Test AutoBlueTopV2 to ensure refactoring didn't break functionality
-   - **Test AutoRedTopV2 for first time** (was empty before!)
+   - Test AutoBlueTop to ensure refactoring didn't break functionality
+   - **Test AutoRedTop for first time** (was empty before!)
    - Verify coordinate mirroring is correct for Red alliance
    - Verify turret angles are correctly mirrored
 
@@ -194,10 +194,10 @@ feat: Consolidate Blue/Red alliance code to eliminate duplication
 
 - Create AllianceConfig for alliance-specific parameters
 - Create BaseTeleOp with common TeleOp logic (84% reduction)
-- Create BaseAutonomousTopV2 with coordinate mirroring (87% reduction)
+- Create BaseAutonomousTop with coordinate mirroring (87% reduction)
 - Refactor TeleOpBlue/Red to extend BaseTeleOp
-- Refactor AutoBlueTopV2 to extend BaseAutonomousTopV2
-- CRITICAL FIX: Implement AutoRedTopV2 (was empty)
+- Refactor AutoBlueTop to extend BaseAutonomousTop
+- CRITICAL FIX: Implement AutoRedTop (was empty)
 - Remove 50s temporary stop from autonomous
 - Total: 456 lines → 445 lines, but organized in reusable base classes
 

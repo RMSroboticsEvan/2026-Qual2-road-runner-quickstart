@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretHardware;
  *
  * NEW: Optional turret auto-align during autonomous to recover from being bumped
  */
-public abstract class BaseAutonomousTopV2 extends LinearOpMode {
+public abstract class BaseAutonomousTop extends LinearOpMode {
     protected Spindexer spindexer;
     protected Intake intake;
     protected Transfer transfer;

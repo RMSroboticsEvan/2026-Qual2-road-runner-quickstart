@@ -70,14 +70,14 @@ Turret: Mode: HYBRID | AT Visible: true | Odo Angle: 45.2° | AT Error: 1.3° | 
 
 ### Option 1: Hardcoded Angles (Default)
 ```java
-// In your AutoBlueTopV2 or AutoRedTopV2 - do nothing!
+// In your AutoBlueTop or AutoRedTop - do nothing!
 // By default, useAutoAlign = false, so hardcoded angles are used
 ```
 
 ### Option 2: Enable Auto-Align (Resilient to Bumps)
 ```java
 @Autonomous(name = "Auto Blue Top V2 (Auto-Align)")
-public class AutoBlueTopV2AutoAlign extends BaseAutonomousTopV2 {
+public class AutoBlueTopAutoAlign extends BaseAutonomousTop {
     @Override
     protected AllianceConfig getAllianceConfig() {
         useAutoAlign = true;  // Enable auto-align!
@@ -101,12 +101,12 @@ With `useAutoAlign = true`:
 
 **Modified:**
 - `Common/BaseTeleOp.java` - Integrated turret control with driver controls
-- `Common/BaseAutonomousTopV2.java` - Optional auto-align support
+- `Common/BaseAutonomousTop.java` - Optional auto-align support
 
 **Unchanged:**
-- `ProgrammingBoards/TurretV2.java` - Low-level turret hardware interface
+- `ProgrammingBoards/TurretHardware.java` - Low-level turret hardware interface
 - TeleOpBlue.java / TeleOpRed.java - No changes needed (inherits from BaseTeleOp)
-- AutoBlueTopV2.java / AutoRedTopV2.java - No changes needed (inherits from BaseAutonomousTopV2)
+- AutoBlueTop.java / AutoRedTop.java - No changes needed (inherits from BaseAutonomousTop)
 
 ### Architecture
 
@@ -121,7 +121,7 @@ BaseTeleOp (Common/)
     ├── Handles driver input (mode switching, reset, manual control)
     └── Calls turretController.update() every loop
 
-BaseAutonomousTopV2 (Common/)
+BaseAutonomousTop (Common/)
     ├── Creates TurretController (MANUAL or HYBRID based on useAutoAlign)
     ├── Provides aimTurret(fallbackAngle) method
     └── Updates odometry and calls turretController.update() when shooting

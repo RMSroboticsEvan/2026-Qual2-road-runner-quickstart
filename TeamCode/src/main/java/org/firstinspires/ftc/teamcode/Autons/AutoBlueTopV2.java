@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.DriveTrain;
@@ -35,6 +36,9 @@ public class AutoBlueTopV2 extends LinearOpMode {
         spindexer = new Spindexer (hardwareMap);
         transfer = new Transfer (hardwareMap);
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        PIDFCoefficients pidf = new PIDFCoefficients(150, 0, 0, 11.7025);
+        flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-48,-48, Math.toRadians(225)));
 
@@ -89,14 +93,13 @@ public class AutoBlueTopV2 extends LinearOpMode {
 
         while(!isStopRequested() && opModeIsActive()) {
             //Start and shoot preload
-            flywheel.flywheel.setVelocity(0.85*1600);
-            spindexer.spindexer.setPower(0.125);
-            transfer.transferDown(1);
+            flywheel.flywheel.setVelocity(0.8*1600);
             sleep(500);
             intake.runIntake(1);
-            turret.turnTo(90); //MAY BE NEGATIVE OR WRONG NUMBER
+            turret.turnTo(-86);
             Actions.runBlocking(shootPreload);
             transfer.transferUp(1);
+            spindexer.spindexer.setPower(0.135);
             sleep(2750);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.4);
@@ -112,12 +115,13 @@ public class AutoBlueTopV2 extends LinearOpMode {
             );
 
             //Shoot balls that came from second row
-            spindexer.spindexer.setPower(0.125);
+            spindexer.spindexer.setPower(0.135);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.4);
 
+            sleep(50000); //TEMPORARY STOP
 
             //Go to pick up balls from gate
             Actions.runBlocking(
@@ -130,12 +134,12 @@ public class AutoBlueTopV2 extends LinearOpMode {
             );
 
             //Shoot balls that came from gate
-            spindexer.spindexer.setPower(0.125);
+            spindexer.spindexer.setPower(0.135);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.4);
-            turret.turnTo(45); //MAY BE NEGATIVE OR WRONG NUMBER
+            turret.turnTo(-45); //MAY BE NEGATIVE OR WRONG NUMBER
 
             //Pick up balls from first row
             Actions.runBlocking(
@@ -148,12 +152,12 @@ public class AutoBlueTopV2 extends LinearOpMode {
             );
 
             //Shoot balls that came from first row
-            spindexer.spindexer.setPower(0.125);
+            spindexer.spindexer.setPower(0.135);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.4);
-            turret.turnTo(90); //MAY BE NEGATIVE OR WRONG NUMBER
+            turret.turnTo(-90); //MAY BE NEGATIVE OR WRONG NUMBER
 
             //Pick up balls from third row
             Actions.runBlocking(
@@ -167,7 +171,7 @@ public class AutoBlueTopV2 extends LinearOpMode {
             );
 
             //Shoot balls that came from third row
-            spindexer.spindexer.setPower(0.125);
+            spindexer.spindexer.setPower(0.135);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);

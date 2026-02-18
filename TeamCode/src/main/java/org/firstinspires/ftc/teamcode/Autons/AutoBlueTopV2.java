@@ -40,34 +40,43 @@ public class AutoBlueTopV2 extends LinearOpMode {
         PIDFCoefficients pidf = new PIDFCoefficients(150, 0, 0, 11.7025);
         flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-48,-48, Math.toRadians(225)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-51,-49, Math.toRadians(225)));
 
         //Shoot Preload
-        Action shootPreload = drive.actionBuilder(new Pose2d(-48,-48,Math.toRadians(225)))
+        Action shootPreload = drive.actionBuilder(new Pose2d(-51,-49,Math.toRadians(225)))
                 .strafeToLinearHeading(new Vector2d(-10, -6), Math.toRadians(315))
                 .build();
 
         //Second Row
         Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(-10, -6, Math.toRadians(315)))
-                .splineToLinearHeading(new Pose2d(16, -67, Math.toRadians(270)), Math.toRadians(275))
+                .splineToSplineHeading(new Pose2d(23, -25, Math.toRadians(270)), Math.toRadians(275))
                 .build();
-        Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(16, -67, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
+        Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(23, -25, Math.toRadians(270)))
+                .splineToSplineHeading(new Pose2d(23, -60, Math.toRadians(270)), Math.toRadians(270))
+                .build();
+        Action pickUpBallsOneP3 = drive.actionBuilder(new Pose2d(23, -60, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(23, -25), Math.toRadians(270))
+                .build();
+        Action pickUpBallsOneP4 = drive.actionBuilder(new Pose2d(23, -25, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(-16, -6), Math.toRadians(315))
                 .build();
 
         //Second Row From Gate
-        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(-14, -6, Math.toRadians(315)))
-                .splineToLinearHeading(new Pose2d(10, -62, Math.toRadians(235)), Math.toRadians(250)) //unsure
+        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(-16, -6, Math.toRadians(315)))
+                .splineToLinearHeading(new Pose2d(17, -60, Math.toRadians(235)), Math.toRadians(250))
                 .build();
-        Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(10, -62, Math.toRadians(235)))
+        Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(17, -60, Math.toRadians(235)))
+                .strafeToLinearHeading(new Vector2d(17, -30), Math.toRadians(270))
+                .build();
+        Action pickUpBallsTwoP3 = drive.actionBuilder(new Pose2d(17, -30, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(270))
                 .build();
 
         //First Row
         Action pickUpBallsThreeP1 = drive.actionBuilder(new Pose2d(-14, -6, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-10, -55), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-18, -52), Math.toRadians(270))
                 .build();
-        Action pickUpBallsThreeP2 = drive.actionBuilder(new Pose2d(-10, -55, Math.toRadians(270)))
+        Action pickUpBallsThreeP2 = drive.actionBuilder(new Pose2d(-18, -52, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
                 .build();
 
@@ -93,53 +102,57 @@ public class AutoBlueTopV2 extends LinearOpMode {
 
         while(!isStopRequested() && opModeIsActive()) {
             //Start and shoot preload
-            flywheel.flywheel.setVelocity(0.8*1600);
-            sleep(500);
+            flywheel.flywheel.setVelocity(0.725*1600);
             intake.runIntake(1);
-            turret.turnTo(-86);
+            turret.turnTo(-85);
             Actions.runBlocking(shootPreload);
             transfer.transferUp(1);
-            spindexer.spindexer.setPower(0.135);
+            spindexer.spindexer.setPower(0.15);
             sleep(2750);
             transfer.transferDown(1);
-            spindexer.spindexer.setPower(0.4);
+            spindexer.spindexer.setPower(0.2);
 
             //Pick up balls from second row
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
                                     pickUpBallsOneP1,
-                                    pickUpBallsOneP2
+                                    pickUpBallsOneP2,
+                                    pickUpBallsOneP3,
+                                    pickUpBallsOneP4
                             )
                     )
             );
 
             //Shoot balls that came from second row
-            spindexer.spindexer.setPower(0.135);
+            turret.turnTo(-90);
+            spindexer.spindexer.setPower(0.15);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
-            spindexer.spindexer.setPower(0.4);
-
-            sleep(50000); //TEMPORARY STOP
+            spindexer.spindexer.setPower(0.2);
 
             //Go to pick up balls from gate
+            Actions.runBlocking(pickUpBallsTwoP1);
+            flywheel.flywheel.setVelocity(0.75*1600);
+            turret.turnTo(-49);
+            sleep(2250);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
-                                    pickUpBallsTwoP1,
-                                    pickUpBallsTwoP2
+                                    pickUpBallsTwoP2,
+                                    pickUpBallsTwoP3
                             )
                     )
             );
 
             //Shoot balls that came from gate
-            spindexer.spindexer.setPower(0.135);
+            spindexer.spindexer.setPower(0.15);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
-            spindexer.spindexer.setPower(0.4);
-            turret.turnTo(-45); //MAY BE NEGATIVE OR WRONG NUMBER
+            spindexer.spindexer.setPower(0.2);
+
 
             //Pick up balls from first row
             Actions.runBlocking(
@@ -152,34 +165,38 @@ public class AutoBlueTopV2 extends LinearOpMode {
             );
 
             //Shoot balls that came from first row
-            spindexer.spindexer.setPower(0.135);
+            turret.turnTo(-89); //MAY BE NEGATIVE OR WRONG NUMBER
+            sleep(200);
+            spindexer.spindexer.setPower(0.15);
             transfer.transferUp(1);
             sleep(2250);
             transfer.transferDown(1);
-            spindexer.spindexer.setPower(0.4);
-            turret.turnTo(-90); //MAY BE NEGATIVE OR WRONG NUMBER
+            spindexer.spindexer.setPower(0.2);
 
-            //Pick up balls from third row
-            Actions.runBlocking(
-                    new ParallelAction(
-                            new SequentialAction(
-                                    pickUpBallsFourP1,
-                                    pickUpBallsFourP2,
-                                    pickUpBallsFourP3
-                            )
-                    )
-            );
-
-            //Shoot balls that came from third row
-            spindexer.spindexer.setPower(0.135);
-            transfer.transferUp(1);
-            sleep(2250);
-            transfer.transferDown(1);
-            spindexer.spindexer.setPower(0);
-            intake.intake.setPower(0);
+//            sleep(50000); //TEMPORARY STOP
+//
+//            //Pick up balls from third row
+//            Actions.runBlocking(
+//                    new ParallelAction(
+//                            new SequentialAction(
+//                                    pickUpBallsFourP1,
+//                                    pickUpBallsFourP2,
+//                                    pickUpBallsFourP3
+//                            )
+//                    )
+//            );
+//
+//            //Shoot balls that came from third row
+//            spindexer.spindexer.setPower(0.15);
+//            transfer.transferUp(1);
+//            sleep(2250);
+//            transfer.transferDown(1);
+//            spindexer.spindexer.setPower(0);
+//            intake.intake.setPower(0);
 
             //Leave shooting zone
             Actions.runBlocking(leaveShootingZone);
+            turret.turnTo(0);
 
             sleep(50000);
     }

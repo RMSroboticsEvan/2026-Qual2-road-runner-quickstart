@@ -92,29 +92,29 @@ public class Aiming extends LinearOpMode {
                 drive.localizer.setPose(new Pose2d(59, -59, Math.toRadians(0)));
             }
 
-            if (gamepad1.left_stick_y == 0 &&
-                    gamepad1.right_stick_x == 0 &&
-                    gamepad1.left_stick_x == 0) {
-
-                flywheel.flywheel.setVelocity(speed * 1600);
-                driveTrain.stopMotor();
-            } else {
-                flywheel.flywheel.setPower(0.8);
-            }
-
-            if (gamepad2.right_bumper) {
-                spindexer.spindexer.setPower(0.125);
-                sleep(200);
-                transfer.transferUp(1);
-                intake.runIntake(1);
-            } else if (gamepad2.left_bumper) {
-                intake.runIntake(-1);
-                spindexer.spindexer.setPower(-0.2);
-            } else {
-                spindexer.spindexer.setPower(0.4);
-                intake.runIntake(1);
-                transfer.transferDown(1);
-            }
+//            if (gamepad1.left_stick_y == 0 &&
+//                    gamepad1.right_stick_x == 0 &&
+//                    gamepad1.left_stick_x == 0) {
+//
+//                flywheel.flywheel.setVelocity(speed * 1600);
+//                driveTrain.stopMotor();
+//            } else {
+//                flywheel.flywheel.setPower(0.8);
+//            }
+//
+//            if (gamepad2.right_bumper) {
+//                spindexer.spindexer.setPower(0.125);
+//                sleep(200);
+//                transfer.transferUp(1);
+//                intake.runIntake(1);
+//            } else if (gamepad2.left_bumper) {
+//                intake.runIntake(-1);
+//                spindexer.spindexer.setPower(-0.2);
+//            } else {
+//                spindexer.spindexer.setPower(0.4);
+//                intake.runIntake(1);
+//                transfer.transferDown(1);
+//            }
 
             //commit
             telemetry.update();

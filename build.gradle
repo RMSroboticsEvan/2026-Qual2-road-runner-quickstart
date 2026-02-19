@@ -8,10 +8,16 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        // Sloth - Fast deployment plugin repository
+        maven {
+            url = 'https://repo.dairy.foundation/releases'
+        }
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
         classpath 'com.android.tools.build:gradle:8.7.0'
+        // Sloth - Fast deployment gradle plugin
+        classpath 'dev.frozenmilk:Load:0.2.4'
     }
 }
 

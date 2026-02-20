@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
 
 @Autonomous
-public class AutoBlueFarV1 extends LinearOpMode {
+public class AutoBlueFar extends LinearOpMode {
     private DriveTrain driveTrain;
     private Spindexer spindexer;
     private Intake intake;
@@ -84,9 +84,9 @@ public class AutoBlueFarV1 extends LinearOpMode {
 
         while(!isStopRequested() && opModeIsActive()) {
             //Start and shoot preload
-            flywheel.flywheel.setVelocity(0.975 * 1600);
+            flywheel.flywheel.setVelocity(0.965 * 1600);
             intake.runIntake(1);
-            turret.turnTo(18);
+            turret.turnTo(17.5);
             sleep(2000);
             transfer.transferUp(1);
             spindexer.spindexer.setPower(0.125);
@@ -107,8 +107,9 @@ public class AutoBlueFarV1 extends LinearOpMode {
             Actions.runBlocking(pickUpBallsOneP3);
 
             //Shoot balls that came from third row
-            flywheel.flywheel.setVelocity(1.07 * 1600);
+            flywheel.flywheel.setVelocity(1.00 * 1600);
             turret.turnTo(15.5);
+            sleep(250);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
             sleep(3500);
@@ -125,7 +126,7 @@ public class AutoBlueFarV1 extends LinearOpMode {
                     )
             );
             sleep(750);
-            flywheel.flywheel.setVelocity(1.03 * 1600);
+            flywheel.flywheel.setVelocity(1.00 * 1600);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
@@ -145,7 +146,8 @@ public class AutoBlueFarV1 extends LinearOpMode {
             );
 
             //Shoot balls that came from human player
-            turret.turnTo(15);
+            turret.turnTo(12);
+            sleep(500);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
             sleep(3500);

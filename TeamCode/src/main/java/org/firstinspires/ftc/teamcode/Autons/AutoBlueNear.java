@@ -197,7 +197,12 @@ public class AutoBlueNear extends LinearOpMode {
 
             //Leave shooting zone
             Actions.runBlocking(leaveShootingZone);
+
+            //Turn everything off
             turret.turnTo(0);
+            spindexer.spindexer.setPower(0);
+            intake.intake.setPower(0);
+            flywheel.flywheel.setVelocity(0 * 1600);
 
             sleep(50000);
     }

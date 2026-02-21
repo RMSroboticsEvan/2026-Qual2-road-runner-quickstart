@@ -40,42 +40,42 @@ public class AutoRedFar extends LinearOpMode {
         PIDFCoefficients pidf = new PIDFCoefficients(150, 0, 0, 11.7025);
         flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(62,16, Math.toRadians(0)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(62,16, Math.toRadians(180)));
 
         //Third Row
-        Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(62, 16, Math.toRadians(0)))
-                .splineToSplineHeading(new Pose2d(32, 25, Math.toRadians(90)), Math.toRadians(270))
+        Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(62, 16, Math.toRadians(180)))
+                .splineToSplineHeading(new Pose2d(29, 25, Math.toRadians(90)), Math.toRadians(270))
                 .build();
-        Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(32, 25, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(32, 58), Math.toRadians(90))
+        Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(29, 25, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(29, 58), Math.toRadians(90))
                 .build();
-        Action pickUpBallsOneP3 = drive.actionBuilder(new Pose2d(32, 58, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(62, 16), Math.toRadians(0))
+        Action pickUpBallsOneP3 = drive.actionBuilder(new Pose2d(29, 58, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(62, 16), Math.toRadians(180))
                 .build();
 
         //Human Player
-        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(62, 16, Math.toRadians(0)))
+        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(62, 16, Math.toRadians(180)))
                 .strafeToLinearHeading(new Vector2d(56, 16), Math.toRadians(90))
                 .build();
         Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(56, 16, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(75, 67), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(75, 65), Math.toRadians(90))
                 .build();
-        Action pickUpBallsTwoP3 = drive.actionBuilder(new Pose2d(75, 67, Math.toRadians(90)))
+        Action pickUpBallsTwoP3 = drive.actionBuilder(new Pose2d(75, 65, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(75, 35), Math.toRadians(90))
                 .build();
         Action pickUpBallsTwoP4 = drive.actionBuilder(new Pose2d(75, 35, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(75, 67), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(75, 65), Math.toRadians(90))
                 .build();
-        Action pickUpBallsTwoP5 = drive.actionBuilder(new Pose2d(75, 67, Math.toRadians(90)))
+        Action pickUpBallsTwoP5 = drive.actionBuilder(new Pose2d(75, 65, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(56, 16), Math.toRadians(90))
                 .build();
         Action pickUpBallsTwoP6 = drive.actionBuilder(new Pose2d(56, 16, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(62, 16), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(62, 16), Math.toRadians(180))
                 .build();
 
         //Leave Shooting Zone
-        Action leaveShootingZone = drive.actionBuilder(new Pose2d(62,16,Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(35, 16), Math.toRadians(0))
+        Action leaveShootingZone = drive.actionBuilder(new Pose2d(62,16,Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(35, 16), Math.toRadians(180))
                 .build();
 
 
@@ -84,9 +84,9 @@ public class AutoRedFar extends LinearOpMode {
 
         while(!isStopRequested() && opModeIsActive()) {
             //Start and shoot preload
-            flywheel.flywheel.setVelocity(0.965 * 1600);
+            flywheel.flywheel.setVelocity(0.95 * 1600);
             intake.runIntake(1);
-            turret.turnTo(-17.5);
+            turret.turnTo(-21);
             sleep(2000);
             transfer.transferUp(1);
             spindexer.spindexer.setPower(0.125);
@@ -107,8 +107,8 @@ public class AutoRedFar extends LinearOpMode {
             Actions.runBlocking(pickUpBallsOneP3);
 
             //Shoot balls that came from third row
-            flywheel.flywheel.setVelocity(1.00 * 1600);
-            turret.turnTo(-15.5);
+            flywheel.flywheel.setVelocity(0.975 * 1600);
+            turret.turnTo(-17);
             sleep(250);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
@@ -126,7 +126,7 @@ public class AutoRedFar extends LinearOpMode {
                     )
             );
             sleep(750);
-            flywheel.flywheel.setVelocity(1.00 * 1600);
+            flywheel.flywheel.setVelocity(0.975 * 1600);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
@@ -146,7 +146,7 @@ public class AutoRedFar extends LinearOpMode {
             );
 
             //Shoot balls that came from human player
-            turret.turnTo(-12);
+            turret.turnTo(-17.5);
             sleep(500);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);

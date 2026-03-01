@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
 
 @TeleOp
-public class A_TO_R_F extends LinearOpMode {
+public class TeleOpRedNear extends LinearOpMode {
 
     private TurretV2 turretV2;
     private DriveTrain driveTrain;
@@ -33,7 +33,7 @@ public class A_TO_R_F extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(40, 16, Math.toRadians(182)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(8, 48, Math.toRadians(90)));
         driveTrain = new DriveTrain(hardwareMap);
         turretV2 = new TurretV2(hardwareMap);
         spindexer = new Spindexer(hardwareMap);
@@ -66,12 +66,22 @@ public class A_TO_R_F extends LinearOpMode {
 //                speed += 0.025;
 //            }
 
-            if (currentPose.position.x > 40) {
-                speed = 1; //Far shooting
-            } else if (currentPose.position.x < -25) {
-                speed = 0.8; //Close shooting
+            if (currentPose.position.y < -15) {
+                if (currentPose.position.x > 40) {
+                    speed = 1.1; //Far shooting
+                } else if (currentPose.position.x < -25) {
+                    speed = 0.9; //Close shooting
+                } else {
+                    speed = 0.93; //Regular shooting
+                }
             } else {
-                speed = 0.83; //Regular shooting
+                if (currentPose.position.x > 40) {
+                    speed = 1; //Far shooting
+                } else if (currentPose.position.x < -25) {
+                    speed = 0.8; //Close shooting
+                } else {
+                    speed = 0.83; //Regular shooting
+                }
             }
 
             atan = Math.toDegrees(Math.atan(Math.abs(-63 - currentPose.position.x) / Math.abs(y - currentPose.position.y)));

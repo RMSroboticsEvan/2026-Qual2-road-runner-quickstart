@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.TurretV2;
 
 @TeleOp
-public class TeleOpCoordinates extends LinearOpMode {
+public class TeleOpBlueNear extends LinearOpMode {
 
     private TurretV2 turretV2;
     private DriveTrain driveTrain;
@@ -33,7 +33,7 @@ public class TeleOpCoordinates extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(180)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(8, -48, Math.toRadians(270)));
         driveTrain = new DriveTrain(hardwareMap);
         turretV2 = new TurretV2(hardwareMap);
         spindexer = new Spindexer(hardwareMap);
@@ -42,7 +42,6 @@ public class TeleOpCoordinates extends LinearOpMode {
         flywheel = new Flywheel(hardwareMap);
 
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        double speed = 0.85;
 
         PIDFCoefficients pidf = new PIDFCoefficients(150, 0, 0, 11.7025);
         flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
@@ -50,35 +49,68 @@ public class TeleOpCoordinates extends LinearOpMode {
         waitForStart();
 
         double r;
-        double x;
+        double atan;
+        double y = -62;
+
+        double speed = 0.8;
 
         while (!isStopRequested() && opModeIsActive()) {
 
             driveTrain.driveMotors(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
             drive.updatePoseEstimate();
-
             Pose2d currentPose = drive.localizer.getPose();
 
-            if (gamepad2.squareWasPressed()) {
-                speed -= 0.025;
-            } else if (gamepad2.circleWasPressed()) {
-                speed += 0.025;
+//            if (gamepad2.squareWasPressed()) {
+//                speed -= 0.025;
+//            } else if (gamepad2.circleWasPressed()) {
+//                speed += 0.025;
+//            }
+
+            if (currentPose.position.y > 15) {
+                if (currentPose.position.x > 40) {
+                    speed = 1.1; //Far shooting
+                } else if (currentPose.position.x < -25) {
+                    speed = 0.9; //Close shooting
+                } else {
+                    speed = 0.93; //Regular shooting
+                }
+            } else {
+                if (currentPose.position.x > 40) {
+                    speed = 1; //Far shooting
+                } else if (currentPose.position.x < -25) {
+                    speed = 0.8; //Close shooting
+                } else {
+                    speed = 0.83; //Regular shooting
+                }
             }
 
-            x = Math.toDegrees(Math.atan(Math.abs(-63 - currentPose.position.x) / Math.abs(58 - currentPose.position.y)));
-            r = 90 + x;
+            atan = Math.toDegrees(Math.atan(Math.abs(-68 - currentPose.position.x) / Math.abs(y - currentPose.position.y)));
+            r = 90 + atan;
 
-            double targetAngle = -Math.toDegrees(currentPose.heading.toDouble()) + r;
+            double targetAngle = -Math.toDegrees(currentPose.heading.toDouble()) - r;
             targetAngle = wrapAngle(targetAngle);
             turretV2.turnTo(targetAngle);
 
             telemetry.addData("X", currentPose.position.x);
             telemetry.addData("Y", currentPose.position.y);
-            telemetry.addData("atan", x);
+            telemetry.addData("atan", atan);
+            telemetry.addData("Speed", speed);
+            telemetry.addData("vel", flywheel.flywheel.getVelocity());
             telemetry.addData("Heading", Math.toDegrees(currentPose.heading.toDouble()));
 
-            if (gamepad1.crossWasPressed()) {
-                drive.localizer.setPose(new Pose2d(59, -59, Math.toRadians(0)));
+            if(gamepad2.squareWasPressed()) {
+                y = y-3;
+            } else if (gamepad2.circleWasPressed()) {
+                y = y+3;
+            }
+
+
+            if (gamepad2.crossWasPressed()) {
+                drive.localizer.setPose(new Pose2d(4, -50, Math.toRadians(180)));
+                y = -62;
+            }
+            if(gamepad2.triangleWasPressed()){
+                y = -62;
             }
 
             if (gamepad1.left_stick_y == 0 &&
@@ -100,11 +132,12 @@ public class TeleOpCoordinates extends LinearOpMode {
                 intake.runIntake(-1);
                 spindexer.spindexer.setPower(-0.2);
             } else {
-                spindexer.spindexer.setPower(0.5);
+                spindexer.spindexer.setPower(0.28);
                 intake.runIntake(1);
                 transfer.transferDown(1);
             }
 
+            //commit
             telemetry.update();
         }
     }

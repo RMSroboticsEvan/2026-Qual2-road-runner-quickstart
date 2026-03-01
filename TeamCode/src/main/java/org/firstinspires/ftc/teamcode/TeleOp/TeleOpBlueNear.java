@@ -66,13 +66,13 @@ public class TeleOpBlueNear extends LinearOpMode {
 //                speed += 0.025;
 //            }
 
-            if (currentPose.position.y > 15) {
+            if (currentPose.position.y > 25) {
                 if (currentPose.position.x > 40) {
-                    speed = 1.1; //Far shooting
+                    speed = 1.04; //Far shooting
                 } else if (currentPose.position.x < -25) {
-                    speed = 0.9; //Close shooting
+                    speed = 0.84; //Close shooting
                 } else {
-                    speed = 0.93; //Regular shooting
+                    speed = 0.87; //Regular shooting
                 }
             } else {
                 if (currentPose.position.x > 40) {

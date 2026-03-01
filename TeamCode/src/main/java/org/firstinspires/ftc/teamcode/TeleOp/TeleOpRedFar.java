@@ -84,7 +84,7 @@ public class TeleOpRedFar extends LinearOpMode {
                 }
             }
 
-            atan = Math.toDegrees(Math.atan(Math.abs(-63 - currentPose.position.x) / Math.abs(y - currentPose.position.y)));
+            atan = Math.toDegrees(Math.atan(Math.abs(-59 - currentPose.position.x) / Math.abs(y - currentPose.position.y)));
             r = 90 + atan;
 
             double targetAngle = -Math.toDegrees(currentPose.heading.toDouble()) + r;

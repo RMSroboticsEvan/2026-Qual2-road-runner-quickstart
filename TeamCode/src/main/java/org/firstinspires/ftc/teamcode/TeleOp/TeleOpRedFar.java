@@ -106,11 +106,14 @@ public class TeleOpRedFar extends LinearOpMode {
 
 
             if (gamepad2.crossWasPressed()) {
-                drive.localizer.setPose(new Pose2d(4, 50, Math.toRadians(180)));
+                drive.localizer.setPose(new Pose2d(61.5, -65.5, Math.toRadians(270)));
                 y = 62;
             }
             if(gamepad2.triangleWasPressed()){
-                y = 62;
+                if(gamepad2.triangleWasPressed()) {
+                    drive.localizer.setPose(new Pose2d(4, 50, Math.toRadians(180)));
+                    y = -62;
+                }
             }
 
             if (gamepad1.left_stick_y == 0 &&

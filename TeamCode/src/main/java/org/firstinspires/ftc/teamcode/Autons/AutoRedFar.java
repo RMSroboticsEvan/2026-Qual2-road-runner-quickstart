@@ -86,7 +86,7 @@ public class AutoRedFar extends LinearOpMode {
             //Start and shoot preload
             flywheel.flywheel.setVelocity(0.95 * 1600);
             intake.runIntake(1);
-            turret.turnTo(-21);
+            turret.turnTo(-23);
             sleep(2000);
             transfer.transferUp(1);
             spindexer.spindexer.setPower(0.125);
@@ -108,7 +108,7 @@ public class AutoRedFar extends LinearOpMode {
 
             //Shoot balls that came from third row
             flywheel.flywheel.setVelocity(0.975 * 1600);
-            turret.turnTo(-17);
+            turret.turnTo(-21);
             sleep(250);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
@@ -126,7 +126,7 @@ public class AutoRedFar extends LinearOpMode {
                     )
             );
             sleep(750);
-            flywheel.flywheel.setVelocity(0.975 * 1600);
+            flywheel.flywheel.setVelocity(1 * 1600);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
@@ -146,7 +146,7 @@ public class AutoRedFar extends LinearOpMode {
             );
 
             //Shoot balls that came from human player
-            turret.turnTo(-17.5);
+            turret.turnTo(-22);
             sleep(500);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);

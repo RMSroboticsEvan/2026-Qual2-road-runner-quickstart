@@ -47,9 +47,9 @@ public class AutoBlueFar extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(32, -25, Math.toRadians(270)), Math.toRadians(270))
                 .build();
         Action pickUpBallsOneP2 = drive.actionBuilder(new Pose2d(32, -25, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(32, -58), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(32, -62), Math.toRadians(270))
                 .build();
-        Action pickUpBallsOneP3 = drive.actionBuilder(new Pose2d(32, -58, Math.toRadians(270)))
+        Action pickUpBallsOneP3 = drive.actionBuilder(new Pose2d(32, -62, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(62, -16), Math.toRadians(180))
                 .build();
 
@@ -58,15 +58,15 @@ public class AutoBlueFar extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(56, -16), Math.toRadians(270))
                 .build();
         Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(56, -16, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(75, -67), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(80, -67), Math.toRadians(270))
                 .build();
-        Action pickUpBallsTwoP3 = drive.actionBuilder(new Pose2d(75, -67, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(75, -35), Math.toRadians(270))
+        Action pickUpBallsTwoP3 = drive.actionBuilder(new Pose2d(80, -67, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(80, -35), Math.toRadians(270))
                 .build();
-        Action pickUpBallsTwoP4 = drive.actionBuilder(new Pose2d(75, -35, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(75, -67), Math.toRadians(270))
+        Action pickUpBallsTwoP4 = drive.actionBuilder(new Pose2d(80, -35, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(80, -67), Math.toRadians(270))
                 .build();
-        Action pickUpBallsTwoP5 = drive.actionBuilder(new Pose2d(75, -67, Math.toRadians(270)))
+        Action pickUpBallsTwoP5 = drive.actionBuilder(new Pose2d(80, -67, Math.toRadians(270)))
                 .strafeToLinearHeading(new Vector2d(56, -16), Math.toRadians(270))
                 .build();
         Action pickUpBallsTwoP6 = drive.actionBuilder(new Pose2d(56, -16, Math.toRadians(270)))
@@ -86,7 +86,7 @@ public class AutoBlueFar extends LinearOpMode {
             //Start and shoot preload
             flywheel.flywheel.setVelocity(0.965 * 1600);
             intake.runIntake(1);
-            turret.turnTo(17.5);
+            turret.turnTo(19.5);
             sleep(2000);
             transfer.transferUp(1);
             spindexer.spindexer.setPower(0.125);
@@ -108,7 +108,7 @@ public class AutoBlueFar extends LinearOpMode {
 
             //Shoot balls that came from third row
             flywheel.flywheel.setVelocity(1.00 * 1600);
-            turret.turnTo(15.5);
+            turret.turnTo(17.5);
             sleep(250);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
@@ -146,7 +146,7 @@ public class AutoBlueFar extends LinearOpMode {
             );
 
             //Shoot balls that came from human player
-            turret.turnTo(12);
+            turret.turnTo(15.5);
             sleep(500);
             spindexer.spindexer.setPower(0.125);
             transfer.transferUp(1);
